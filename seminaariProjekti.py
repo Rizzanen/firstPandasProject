@@ -1,14 +1,9 @@
-
-
-
-# If you specifically need to import functions:
 from calculations import getAverage, getAverageOfYears, getAverageOfMonth, getMax, getMin 
-
 
 
 def welcome():
     print("Welcome to my project! ")
-    print("Here you can analyze data of finnish exchange electricity prices between 2021-2024.")
+    print("Here you can analyze data of finnish exchange electricity prices between 01/2021-04/2024.")
     options()
 
 def options():    
@@ -18,7 +13,7 @@ def options():
     print("For max value type 4")
     print("For min value type 5")
     print("To quit type x")
-    userInput = input("Type a number and press enter \n")
+    userInput = input("Type a command and press enter \n")
 
     if userInput == "1":
         print("\n")

@@ -5,18 +5,12 @@ filePath = 'sahkonHintaData.xlsx'
 
 dataFrame = pd.read_excel(filePath)
 
-#dataFrame on nimennyt automaattisesti Headerit/ column namet excel tiedoston ensimmäisen rivin tietojen mukaan
-#Niihin päästää käsiksi esim -> dataFrame['Aika'] tämä sisältää Aika columnin datat.
-
-#jotta pandas osaa ymmärtää dataFrame['Aika'] datan oikein, pitää sille kertoa missä muodossa data on. Se tehdään format lauseessa, esim day = %d
-#kun datamme on muodossa 01/01/2021  1.00.00 eli day, month, year, hour, min ,sec on format lause format='%d/%m/%Y %H.%M.%S'
-
-#Muutetaan data muotoon jossa pandas/python voi käyttää sitä
+#Muutetaan data muotoon jossa pandas voi käyttää sitä
 dataFrame['Aika'] = pd.to_datetime(dataFrame['Aika'], format='%d/%m/%Y %H.%M.%S')
 
 # Hinta columnin sisältämästä datasta pitää pilkut muuttaa pisteiksi, jotta python / pandas voi tulkita ne desimaali lukuina. Pythonissa desimaalierottaja on piste eikä pilkku. 
 dataFrame['Hinta (snt/kWh)'] = dataFrame['Hinta (snt/kWh)'].astype(str).replace(',', '.').astype(float)
-#\n 
+
 #Luodaan uusi columni "Year" johon asetetaan dataksi "Aika" columnin vuosi luvut. Niihin päästään käsiksi .dt.year metodeilla. 
 dataFrame['Year'] = dataFrame['Aika'].dt.year
 #sama homma kuukausilla
@@ -37,6 +31,7 @@ def getAverageOfYears():
     roundedAveragePrices = round(averagePricePerYear, 2).reset_index() 
     #Käytetään tabulate kirjastoa, joka tekee roundedAveragePrices columnista silmälle miellyttävämmän ja helpommin luettavamman.
     print(tabulate(roundedAveragePrices, headers=['Year', 'Hinta (snt/kWh)'] , tablefmt="fancy_grid", showindex=False))
+   
 
 def getAverageOfMonth():
     year = int(input("Which year? "))
@@ -45,7 +40,9 @@ def getAverageOfMonth():
     
     #Järjestetään data "Month" columnin mukaan, jotta saadaan laskettua keskiarvo kaikista arvoista, joissa kuukausi on sama .mean() metodilla. 
     averagePricePerMonth = filteredDataFrame.groupby(['Month'])['Hinta (snt/kWh)'].mean().reset_index()
-    #pyöristetään tulos 2 desimaaliin ja muutetaan objekti toString muotoon printatessa. 
+    #pyöristetään tulos 2 desimaaliin ja groupby  lause tekee "Month" columnista indexi columnin. Jotta saadaan "Month" takaisin normi columniksi pitää
+    #kutsua .reset_index() metodia, joka luo taas uuden indeksi rivin ja "Year" column käyttäytyy taas normaalisti. 
+    #Käytetään tabulate kirjastoa, joka tekee averagePricePerMonth columnista silmälle miellyttävämmän ja helpommin luettavamman.
     print(tabulate(round(averagePricePerMonth , 2) , headers=['Month', 'Hinta (snt/kWh)'], tablefmt="fancy_grid",showindex=False))  
 
 def getMax():
