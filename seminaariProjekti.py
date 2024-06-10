@@ -1,4 +1,4 @@
-from calculations import getAverage, getAverageOfYears, getAverageOfMonth, getMax, getMin 
+from calculations import getAverage, getAverageOfYears, getAverageOfMonth, getMax, getMin, getBelowAverageTimes
 
 
 def welcome():
@@ -12,6 +12,7 @@ def options():
     print("For averages of years months type 3")
     print("For max value type 4")
     print("For min value type 5")
+    print("For hours where the price is lower than average price type 6")
     print("To quit type x")
     userInput = input("Type a command and press enter \n")
 
@@ -40,11 +41,16 @@ def options():
         getMin()
         print("\n")
         options()
+    elif userInput == "6":
+        print("\n")
+        getBelowAverageTimes()
+        print("\n")
+        options()
     elif userInput == "x":
         return
     else:
         print("\n")
-        print("Please type 1, 2, 3, 4, 5 or x")
+        print("Please type 1, 2, 3, 4, 5, 6 or x")
         print("\n")
         options()
 

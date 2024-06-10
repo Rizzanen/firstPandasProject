@@ -13,6 +13,7 @@ dataFrame['Hinta (snt/kWh)'] = dataFrame['Hinta (snt/kWh)'].astype(str).replace(
 
 #Luodaan uusi columni "Year" johon asetetaan dataksi "Aika" columnin vuosi luvut. Niihin päästään käsiksi .dt.year metodeilla. 
 dataFrame['Year'] = dataFrame['Aika'].dt.year
+dataFrame['Hour'] = dataFrame['Aika'].dt.hour
 #sama homma kuukausilla
 dataFrame['Month'] = dataFrame['Aika'].dt.month
 
@@ -57,3 +58,9 @@ def getMin():
     #printataan tulos pyöristettynä 2 desimaaliin.
     print("Min price between 2021-2024 is:", round(minPriceHinta, 2), "snt / kWh")
 
+def getBelowAverageTimes():
+    average = dataFrame['Hinta (snt/kWh)'].mean()
+    cheapestHour = dataFrame.groupby("Hour")["Hinta (snt/kWh)"].mean().reset_index()
+    filteredDataFrame = cheapestHour[(cheapestHour['Hinta (snt/kWh)'] < average)]
+    print("The following hours has a lower price than the average. The average price of every hour also displayed. ")
+    print(tabulate(round(filteredDataFrame , 2) , headers=['Hours', 'Hinta (snt/kWh)'], tablefmt="fancy_grid",showindex=False))
